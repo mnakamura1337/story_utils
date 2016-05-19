@@ -1,0 +1,25 @@
+#!/usr/bin/env ruby
+
+require 'yaml'
+require_relative 'story'
+
+LANGS = ['en', 'ja', 'ru']
+
+in_fn, out_fn = ARGV
+
+story = Story.load(in_fn)
+yaml = []
+
+story['script'].each { |op|
+  case op['op']
+  when 'menu_add', 'narrate', 'say'
+    h = {}
+    LANGS.each { |lang|
+      h[lang] = op['txt'][lang] || ''
+    }
+    h['zz'] = '___'
+    yaml << h
+  end
+}
+
+File.open(out_fn, 'w') { |f| f.puts yaml.to_yaml(options = {:line_width => -1}) }

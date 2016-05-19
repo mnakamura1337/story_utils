@@ -1,0 +1,57 @@
+#!/usr/bin/env ruby
+
+require 'set'
+require 'yaml'
+require_relative 'story'
+
+def check_match(txt1, txt2)
+  all_keys = Set.new(txt1.keys) + Set.new(txt2.keys)
+  all_keys.each { |k|
+    next if k == 'zz'
+    t1 = txt1[k]
+    t2 = txt2[k]
+    unless t1.nil? or t2.nil?
+      unless t1.empty? or t2.empty?
+        return false if t1 != t2
+      end
+    end
+  }
+  return true
+end
+
+def copy_translations(story_txt, trans_txt)
+  trans_txt.each_pair { |lang, txt|
+    next if txt.nil? or txt.empty? or lang == 'zz'
+    story_txt[lang] = txt
+  }
+end
+
+unless ARGV.count == 3
+  puts "Usage: translate_yaml2story <story_in.js> <translation.yaml> <story_out.js>"
+  exit 0
+end
+
+in_story, in_yaml, out_fn = ARGV
+
+story = Story.load(in_story)
+yaml = YAML.load(File.read(in_yaml))
+
+yaml_i = 0
+
+story['script'].each { |op|
+  case op['op']
+  when 'menu_add', 'narrate', 'say'
+    story_txt = op['txt']
+    trans_txt = yaml[yaml_i]
+    unless check_match(story_txt, trans_txt)
+      $stderr.puts "Story: #{story_txt.to_json}"
+      $stderr.puts "Trans: #{trans_txt.to_json}"
+      raise 'Translation vs original mismatch'
+    end
+
+    copy_translations(story_txt, trans_txt)
+    yaml_i += 1
+  end
+}
+
+story.save(out_fn)
