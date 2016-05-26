@@ -17,3 +17,13 @@ original story file (`in.story`) and YAML translation file
 (`trans.yaml`) and generates new story file (`out.story`) with all the
 contents of original story file and translations merged from
 `trans.yaml` file.
+
+## story_merge
+
+Usage: story_merge 1.story 2.story ... >out.story
+
+Merges several stories together, dumps resulting story to stdout
+(usually should be redirected to a file). `meta` must match fully,
+`imgs` and `chars` should be non-conflicting (i.e. there shouldn't be
+different values for the same key), `script` entries will be appended
+in an order of stories specified in command line.
