@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+
+# Usage: story_merge [1.story] [2.story] ... >full.story
+
+require_relative 'story'
+
+full = nil
+
+ARGV.each { |fn|
+  begin
+    if full.nil?
+      full = Story.load(fn)
+    else
+      full.merge(Story.load(fn))
+    end
+  rescue Story::MergeConflict => e
+    $stderr.puts "while merging #{fn}"
+    $stderr.puts e.message
+    exit 1
+  end
+}
+
+full.save_io($stdout)
