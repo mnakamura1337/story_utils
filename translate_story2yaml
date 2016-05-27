@@ -14,6 +14,7 @@ story['script'].each { |op|
   case op['op']
   when 'menu_add', 'narrate', 'say'
     h = {}
+    h['0ch'] = op['char'] if op['char']
     LANGS.each { |lang|
       h[lang] = op['txt'][lang] || ''
     }
