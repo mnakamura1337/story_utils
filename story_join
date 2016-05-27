@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+
+# Usage: story_join [1.story] [2.story] ... >full.story
+
+require_relative 'story'
+
+full = nil
+
+ARGV.each { |fn|
+  begin
+    if full.nil?
+      full = Story.load(fn)
+    else
+      full.join(Story.load(fn))
+    end
+  rescue Story::MergeConflict => e
+    $stderr.puts "while joining #{fn}"
+    $stderr.puts e.message
+    exit 1
+  end
+}
+
+full.save_io($stdout)
