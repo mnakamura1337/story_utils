@@ -22,8 +22,8 @@ contents of original story file and translations merged from
 
 Usage: story_merge 1.story 2.story ... >out.story
 
-Merges several stories together, dumps resulting story to stdout
-(usually should be redirected to a file). `meta` must match fully,
-`imgs` and `chars` should be non-conflicting (i.e. there shouldn't be
-different values for the same key), `script` entries will be appended
-in an order of stories specified in command line.
+Merges (concatenates) several stories together, dumps resulting story
+to stdout (usually should be redirected to a file). `meta` must match
+fully, `imgs` and `chars` should be non-conflicting (i.e. there
+shouldn't be different values for the same key), `script` entries will
+be appended in an order of stories specified in command line.
