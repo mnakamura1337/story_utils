@@ -40,7 +40,7 @@ yaml_i = 0
 
 story['script'].each { |op|
   case op['op']
-  when 'menu_add', 'narrate', 'say'
+  when 'menu_add', 'narrate', 'say', 'think'
     story_txt = op['txt']
     trans_txt = yaml[yaml_i]
     unless check_match(story_txt, trans_txt)

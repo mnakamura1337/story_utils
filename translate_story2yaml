@@ -12,7 +12,7 @@ yaml = []
 
 story['script'].each { |op|
   case op['op']
-  when 'menu_add', 'narrate', 'say'
+  when 'menu_add', 'narrate', 'say', 'think'
     h = {}
     h['0ch'] = op['char'] if op['char']
     LANGS.each { |lang|
